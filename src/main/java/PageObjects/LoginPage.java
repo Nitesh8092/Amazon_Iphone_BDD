@@ -3,8 +3,9 @@ package PageObjects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+
+import java.util.List;
 
 public class LoginPage {
     private String URL;
@@ -16,51 +17,63 @@ public class LoginPage {
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(how = How.XPATH, using = "//*[@id=\'email\']")
-    private WebElement _username;
+    @FindBy(id = "twotabsearchtextbox")
+    private WebElement searchText;
 
-    @FindBy(how = How.XPATH, using = "//*[@id=\'passwd\']")
-    private WebElement _password;
+    @FindBy(xpath = "//input[@value=\"Go\"]")
+    private WebElement submit;
 
-    @FindBy(how = How.XPATH, using = "//*[@id=\'SubmitLogin\']/span")
-    private WebElement _loginButton;
+    @FindBy(id = "nav-search")
+    private WebElement navSearch;
 
-    @FindBy(how = How.XPATH, using = "//*[@id=\'header\']/div[2]/div/div/nav/div[1]/a")
-    private WebElement click_LogIn;
+    @FindBy(id = "atfResults")
+    LoginPage searchResults;
 
-    @FindBy(how = How.XPATH, using = "//*[@id=\'header\']/div[2]/div/div/nav/div[2]/a")
-    private WebElement click_LogOut;
+    @FindBy(xpath = ".//li[starts-with(@id, 'result_')]")
+    List<LoginPage> productItemList;
 
+    @FindBy(xpath = "./div/div[3]/div[1]")
+    private WebElement itemDetail;
 
-    private void enter_username(String username) {
-        _username.sendKeys(username);
+    @FindBy(xpath = "./div/div[4]/div[1]")
+    private WebElement price;
+
+    public void printSearchResult() {
+        System.out.println("Prepare to print all results");
+        searchResults.printAllItems();
     }
 
-    private void enter_password(String password) {
-        _password.sendKeys(password);
+
+    public void search_Iphone() {
+        searchText.sendKeys("Iphone");
     }
 
-    private void click_loginButton()
-
-    {
-        _loginButton.click();
-    }
-
-    public void logIn(String username, String password) {
-        enter_username(username);
-        enter_password(password);
-        click_loginButton();
-    }
 
     public void open_LoginPage() {
         driver.get(URL);
     }
-    public void click_LogInButton() {
-        click_LogIn.click();
 
+    public void click_Submit() {
+        submit.click();
     }
-    public void click_LogOutButton() {
-        click_LogOut.click();
 
+
+    public void printAllItems() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("We found totally ").append(productItemList.size()).append(" items\n");
+        int i = 1;
+        for (LoginPage LoginPage : productItemList) {
+            sb.append(i++);
+            sb.append(" ");
+            sb.append(getItemDisplayString());
+            sb.append("\n");
+        }
+
+        System.out.println(sb.toString());
     }
+
+    public String getItemDisplayString() {
+        return "Item: " + itemDetail.getText() + "  price: " + price.getText();
+    }
+
 }

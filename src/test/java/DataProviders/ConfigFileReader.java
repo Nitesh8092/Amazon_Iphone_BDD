@@ -79,6 +79,7 @@ public class ConfigFileReader {
     }
 
     public DriverType getLocalBrowserName()
+
     {
         return getDriverType(properties.getProperty("localBrowserName"));
     }
@@ -94,14 +95,7 @@ public class ConfigFileReader {
         }
     }
 
-    public String getURL(){
-        String url = properties.getProperty("url");
-        if(url!= null) {
-            return url.trim();
-        }else {
-            throw new RuntimeException("'url' not specified in the Configuration.properties file.");
-        }
-    }
+
 
 
     }
